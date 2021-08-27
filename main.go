@@ -94,7 +94,27 @@ func main() {
 	// Later on, something can override a config and add new params.
 	fmt.Println("Adding some new droids")
 	config = config.Add(ConfigDroids, 211)
+
 	if droids, ok := config.Get(ConfigDroids, 123); ok {
 		fmt.Printf("These ARE the droids you are looking for. %#v\n", droids)
 	}
+
+	// We can even override it again
+	config = config.Add(ConfigDroids, 789)
+
+	// Note that now we have two values for ConfigDroids, but a call to Get will
+	// only return the first. This technique can be used to temporarily mask a config
+	// item.
+	if droids, ok := config.Get(ConfigDroids, 123); ok {
+		fmt.Printf("We expect the later config to be returned first. 789 == %#v\n", droids)
+	}
+
+	// Note that now we have two values for ConfigDroids, but a call to Get will
+	// only return the first. This technique can be used to temporarily mask a config
+	// item. For example, you could do something like this:
+	// localConfig := config.Add(ConfigDroids, 888)
+	// And then pass localConfig to just the place where you need that different config
+	// value. With a more robust API, it lets you do things like "Try the most recent
+	// value, and if that doesn't work, fall back to the earlier value..."
+
 }
