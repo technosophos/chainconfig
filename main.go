@@ -91,6 +91,7 @@ func main() {
 		fmt.Printf("These are not the droids you are looking for. %#v\n", oops)
 	}
 
+	// Later on, something can override a config and add new params.
 	fmt.Println("Adding some new droids")
 	config = config.Add(ConfigDroids, 211)
 	if droids, ok := config.Get(ConfigDroids, 123); ok {
