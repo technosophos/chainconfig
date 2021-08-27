@@ -7,14 +7,15 @@ import (
 const (
 	ConfigBaseDir = iota
 	ConfigServerPort
-	ConfigMonkeyPatcher
+	ConfigMonkeyPatcher // Deprecated (This is the best we can do when something should not be used)
 	ConfigDuckTyper
-	ConfigAreWeHuman // Deprecated
+	ConfigAreWeHuman
 	ConfigOrAreWeDancers
 	ConfigFrobnitz
 	ConfigDroids
 )
 
+// Create a new Config
 func New(key int, value interface{}) *Config {
 	return &Config{
 		next_config: nil,
@@ -24,19 +25,27 @@ func New(key int, value interface{}) *Config {
 }
 
 type Config struct {
+	// Link to next item
 	next_config *Config
-	key         int
-	value       interface{}
+	// My key
+	key int
+	// My value
+	value interface{}
 }
 
+// IsNext indicates if we are at the end of the list
+// Usually, there is no reason for userland code to call this
 func (c *Config) IsNext() bool {
 	return c.next_config != nil
 }
 
+// Next returns the next item
+// Usually, there is no reason for userland code to call this
 func (c *Config) Next() *Config {
 	return c.next_config
 }
 
+// Add a new config item to the list, and return it as the new head of the list.
 func (c *Config) Add(key int, value interface{}) *Config {
 	return &Config{
 		next_config: c,
@@ -47,7 +56,7 @@ func (c *Config) Add(key int, value interface{}) *Config {
 
 // There are other methods, like GetAll, that I did not do here.
 
-// get finds and returns the first matchng value in the list.
+// Get finds and returns the first matchng value in the list.
 // If no value is found, it returns the default value.
 // The 'ok' flag indicates whether the value was found (true)
 // or whether it was not found and the default was used (false).
